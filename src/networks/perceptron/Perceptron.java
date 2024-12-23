@@ -2,13 +2,37 @@ package networks.perceptron;
 
 import networks.Network;
 import networks.NetworkModels;
+import networks.Tokens;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Класс Perceptron представляет собой сущность многослойного перцептрона.
+ * Обрабатывает данные типа {@code Double} и выдает результат типа {@code Double} в диапозоне от 0 до 1.
+ * Используется сигмоида как функция активации.
+ * <p>
+ * Примечание: может работать только по заранее подготовленным данных по нейронной сети.
+ * </p>
+ * @author Никифоров Дмитрий
+ * @since 1.0
+ */
 public class Perceptron implements Network<Double, Double> {
-    protected final NetworkModels MODEL = NetworkModels.PERCEPTRON;
+    /**
+     * MODEL - модель используемой нейронной сети.
+     * Инициализируется при создании нового экземпляра
+     */
+    protected final NetworkModels MODEL;
+
+    {
+        // Инициализация модели
+        MODEL = NetworkModels.PERCEPTRON;
+    }
+
+    /**
+     * layers - массив {@code Layer}, содержащий входной, скрытые (при наличии) и выходной слои
+     */
     protected Layer[] layers;
 
     public Perceptron(){}
@@ -20,12 +44,12 @@ public class Perceptron implements Network<Double, Double> {
             int l = -1;
             while((line = br.readLine()) != null){
                 if(l < 0) {
-                    String[] str = line.split(" ");
+                    String[] str = line.split(Tokens.SEP_OF_ELEMENTS);
                     try {
                         layers = new Layer[Integer.parseInt(str[0])];
                         for (int i = 0; i < layers.length; i++) {
                             if (Integer.parseInt(str[i + 1]) < 0) return 1;
-                            layers[i] = new Layer(Integer.parseInt(str[i + 1]));
+                            layers[i] = new Layer(Integer.parseInt(str[i + 1]), (i < layers.length - 1 ? Integer.parseInt(str[i + 2]) : 0));
                         }
                         l++;
                         continue;
@@ -34,11 +58,11 @@ public class Perceptron implements Network<Double, Double> {
                     }
                 }
                 if(l == layers.length - 1) return 1;
-                String[] w = line.split(";");
+                String[] w = line.split(Tokens.SEP_OF_OBJECTS);
                 for (int j = 0; j < layers[l].getLength(); j++) {
-                    if (!layers[l].setWeight(w[j].split(" "), j)) return 1;
+                    if (!layers[l].setWeight(w[j].split(Tokens.SEP_OF_ELEMENTS), j)) return 1;
                 }
-                if (!layers[l].setWeightB(w[layers[l].getLength()].split(" "))) return 1;
+                if (!layers[l].setWeightB(w[layers[l].getLength()].split(Tokens.SEP_OF_ELEMENTS))) return 1;
                 l++;
             }
             return 0;
@@ -49,16 +73,16 @@ public class Perceptron implements Network<Double, Double> {
 
     @Override
     public int loadFromString(String content) {
-        String[] lines = content.split("\n");
+        String[] lines = content.split(Tokens.SEP_OF_LAYERS);
         int l = -1;
         for(String line : lines){
             if(l < 0) {
-                String[] str = line.split(" ");
+                String[] str = line.split(Tokens.SEP_OF_ELEMENTS);
                 try {
                     layers = new Layer[Integer.parseInt(str[0])];
                     for (int i = 0; i < layers.length; i++) {
                         if (Integer.parseInt(str[i + 1]) < 0) return 1;
-                        layers[i] = new Layer(Integer.parseInt(str[i + 1]));
+                        layers[i] = new Layer(Integer.parseInt(str[i + 1]), (i < layers.length - 1 ? Integer.parseInt(str[i + 2]) : 0));
                     }
                     l++;
                     continue;
@@ -67,11 +91,11 @@ public class Perceptron implements Network<Double, Double> {
                 }
             }
             if(l == layers.length - 1) return 1;
-            String[] w = line.split(";");
+            String[] w = line.split(Tokens.SEP_OF_OBJECTS);
             for (int j = 0; j < layers[l].getLength(); j++) {
-                if (!layers[l].setWeight(w[j].split(" "), j)) return 1;
+                if (!layers[l].setWeight(w[j].split(Tokens.SEP_OF_ELEMENTS), j)) return 1;
             }
-            if (!layers[l].setWeightB(w[layers[l].getLength()].split(" "))) return 1;
+            if (!layers[l].setWeightB(w[layers[l].getLength()].split(Tokens.SEP_OF_ELEMENTS))) return 1;
             l++;
         }
         return 0;

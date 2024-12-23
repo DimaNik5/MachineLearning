@@ -1,16 +1,28 @@
-package networks.perceptron.train;
+package networks.perceptron.train.backpropagation;
 
 import networks.perceptron.Layer;
 
-public class TrainLayer extends Layer {
-    private TrainNeuron[] trainNeurons;
-    private  TrainNeuron tb;
+/**
+ * Класс TrainLayer дополняет сущность {@code Layer} возможностью обучения.
+ * @author Никифоров Дмитрий
+ * @since 1.0
+ */
+final class TrainLayer extends Layer {
+    /**
+     * trainNeurons - массив {@code TrainNeuron} для обучения
+     */
+    private final TrainNeuron[] trainNeurons;
+    /**
+     * tb - нейрон смещения с возможность обучения
+     */
+    private final TrainNeuron tb;
 
-    public TrainLayer(int length) {
-        super(length);
-    }
-
-    public TrainLayer(int length, int nexLen){
+    /**
+     * Конструктор для создания нового слоя
+     * @param length количество нейронов без учета нейрона смещния
+     * @param nexLen количество нейронов в следующем слое
+     */
+    TrainLayer(int length, int nexLen){
         trainNeurons = new TrainNeuron[length];
         if(nexLen > 0){
             for(int i = 0; i < length; i++){
@@ -28,6 +40,11 @@ public class TrainLayer extends Layer {
         neurons = trainNeurons;
     }
 
+    /**
+     * setDelta считает и устанавливает дельты (разница) нейронам этого слоя по дельтам следующего - обратное распростронение ошибки (дельты)
+     * @param ideal массив дельт следующего слоя
+     * @param last флаг о том, что это выходной слой
+     */
     public Double[] setDelta(Double[] ideal, boolean last){
         Double[] res = new Double[trainNeurons.length];
         for(int i = 0; i < trainNeurons.length; i++){
@@ -48,7 +65,13 @@ public class TrainLayer extends Layer {
         return res;
     }
 
-    // Установка новых весов
+    /**
+     * setDeltaWeight - метод для установки новых весов по дельтам следующего слоя
+     * @param delta массив дельт следующего слоя
+     * @param speed скорость обучения
+     * @param alpha момент градиентного спуска
+     * @return максимальный новый вес в этом слое
+     */
     public double setDeltaWeight(double[] delta, double speed, double alpha){
         double max = 0, t;
         for(TrainNeuron neuronTrain : trainNeurons){
@@ -60,7 +83,10 @@ public class TrainLayer extends Layer {
         return max; // максимальный новый вес
     }
 
-    // Получение списка дельт
+    /**
+     * getDelta - метод для получения дельт нейронов
+     * @return массив дельт у нейронов в этом слое
+     */
     public double[] getDeltas(){
         double[] res = new double[trainNeurons.length];
         for(int i = 0; i < trainNeurons.length; i++){
@@ -69,12 +95,12 @@ public class TrainLayer extends Layer {
         return res;
     }
 
-    // Пропорциональной деление весов нейронов
+    /**
+     * divWeight - метод для ропорциональной деления весов нейронов, если вес какой-либо связи превысил максимальный
+     */
     public void divWeight(double div){
         for(TrainNeuron neuronTrain : trainNeurons){
             neuronTrain.divWeight(div);
         }
     }
-
-
 }
