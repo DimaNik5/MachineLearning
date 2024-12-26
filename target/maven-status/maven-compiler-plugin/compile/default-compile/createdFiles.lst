@@ -1,0 +1,13 @@
+com\ai\networks\perceptron\Neuron.class
+com\ai\networks\Teacher.class
+com\ai\networks\perceptron\Layer.class
+com\ai\networks\perceptron\train\teacher\PerceptronTeacher.class
+com\ai\networks\Network.class
+com\ai\networks\perceptron\train\backpropagation\TrainPerceptronBackpropagation.class
+com\ai\MachineLearning.class
+com\ai\networks\perceptron\Perceptron.class
+com\ai\networks\NetworkModels.class
+com\ai\networks\perceptron\train\backpropagation\TrainLayer.class
+com\ai\networks\Tokens.class
+com\ai\networks\perceptron\train\backpropagation\TrainNeuron.class
+com\ai\networks\Training.class
