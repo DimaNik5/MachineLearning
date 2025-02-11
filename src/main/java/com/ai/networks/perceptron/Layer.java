@@ -14,7 +14,7 @@ public class Layer {
     /**
      * b - {@code Neuron} смещения
      */
-    protected Neuron b;
+    protected Neuron biasNeuron;
 
     /**
      * Пустой конструктор, использующийся в наследнике для предотвращения повторного создания
@@ -33,7 +33,7 @@ public class Layer {
         for(int i = 0; i < length; i++){
             neurons[i] = new Neuron(nexLen);
         }
-        b = new Neuron(nexLen);
+        biasNeuron = new Neuron(nexLen);
     }
 
     /**
@@ -108,8 +108,8 @@ public class Layer {
      * @see #getWeight(int, int)
      */
     public double getWeightB(int i){
-        if(i < 0 || i >= b.getLenWeight()) throw new IndexOutOfBoundsException(i);
-        return b.getWeight(i);
+        if(i < 0 || i >= biasNeuron.getLenWeight()) throw new IndexOutOfBoundsException(i);
+        return biasNeuron.getWeight(i);
     }
 
     /**
@@ -169,7 +169,7 @@ public class Layer {
     public boolean setWeightB(String[] weights){
         try{
             for(int j = 0; j < weights.length; j++){
-                b.setWeight(Double.parseDouble(weights[j]), j);
+                biasNeuron.setWeight(Double.parseDouble(weights[j]), j);
             }
         } catch (NumberFormatException e) {
             return false;

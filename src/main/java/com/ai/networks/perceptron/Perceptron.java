@@ -26,7 +26,6 @@ public class Perceptron implements Network<Double, Double> {
     protected final NetworkModels MODEL;
 
     {
-        // Инициализация модели
         MODEL = NetworkModels.PERCEPTRON;
     }
 
@@ -101,7 +100,6 @@ public class Perceptron implements Network<Double, Double> {
 
     @Override
     public void setInput(Double[] input) {
-        // Установка входных значений
         layers[0].setInput(input);
     }
 
