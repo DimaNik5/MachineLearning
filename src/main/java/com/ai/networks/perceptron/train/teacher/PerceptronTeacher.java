@@ -15,18 +15,11 @@ import java.util.List;
  * @since 1.0
  */
 public class PerceptronTeacher implements Teacher<Double, Double> {
-    /**
-     * inputs - список массивов входных значений типа {@code Double}
-     */
     private List<Double[]> inputs;
-
-    /**
-     * outputs - список массивов ожидаемых значений типа {@code Double}
-     */
     private List<Double[]>  outputs;
 
     /**
-     * loadData - индивидуальный метод для загрузки датасета из файлов
+     * Индивидуальный метод для загрузки датасета из файлов
      * @param fileIn {@code String} - путь до файла, содержащий входные значения
      * @param fileOut {@code String} - путь до файла, содержащий ожидаемые значения
      * @return результат загрузки. При успешной - 0. При неудаче - 1.

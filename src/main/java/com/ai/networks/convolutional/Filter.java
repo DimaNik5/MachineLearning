@@ -3,7 +3,6 @@ package com.ai.networks.convolutional;
 import com.ai.networks.Tokens;
 
 import java.util.Arrays;
-import java.util.stream.DoubleStream;
 
 /**
  * Класс Filter хранит матрицы фильтра, а также значение смещения.
@@ -15,7 +14,10 @@ public class Filter {
     protected Matrix[] matrices;
     protected double biasValue;
 
-    // Struct: countMat h w  x x x y y y z z z ...  b
+    /**
+     * Метод загрузки фильтра из строки
+     * @param content {@code String}, содержащая информацию про фильтр.
+     */
     public void loadFromString(String content){
         try{
             double[] cont = Arrays.stream(content.split(Tokens.SEP_OF_ELEMENTS)).mapToDouble(Double::parseDouble).toArray();
@@ -28,14 +30,13 @@ public class Filter {
                 }
             }
             biasValue = cont[cont.length - 1];
-
         }catch (NumberFormatException e){
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * convolution - свертка через конктретный фильтр.
+     * Свертка через конктретный фильтр.
      * <br>Примечание: количесво входных матриц должно совпадать с количеством матриц в фильтре.
      * @param input массив входных матриц.
      * @param output выходная матрица.
@@ -43,7 +44,6 @@ public class Filter {
     public void convolution(Matrix[] input, Matrix output){
         if(input.length != matrices.length) throw new RuntimeException("The number of input channels does not match the number of filter channels");
         output.setZero();
-
         for (int i = 0; i <= input[0].getH() - matrices[0].getH(); i++){
             for(int j = 0; j <= input[0].getW() - matrices[0].getW(); j++){
                 for(int k = 0; k < input.length; k++){
@@ -54,6 +54,14 @@ public class Filter {
         }
     }
 
+    /**
+     * Метод для получения значения свертки по координатам.
+     * @param i индекс по высоте.
+     * @param j индекс по ширине.
+     * @param in входная матрица
+     * @param filter матрица фильтра
+     * @return {@code double} - сумма произведений соответсвующих значений у входной матрицы и фильтра.
+     */
     private double overlay(int i, int j, Matrix in, Matrix filter){
         double res = 0;
         for (int y = 0; y < filter.getH(); y++){

@@ -8,13 +8,7 @@ import com.ai.networks.perceptron.Layer;
  * @since 1.0
  */
 final class TrainLayer extends Layer {
-    /**
-     * trainNeurons - массив {@code TrainNeuron} для обучения
-     */
     private final TrainNeuron[] trainNeurons;
-    /**
-     * tb - нейрон смещения с возможность обучения
-     */
     private final TrainNeuron tBiasNeuron;
 
     /**
@@ -41,7 +35,7 @@ final class TrainLayer extends Layer {
     }
 
     /**
-     * setDelta считает и устанавливает дельты (разница) нейронам этого слоя по дельтам следующего - обратное распростронение ошибки (дельты)
+     * Считает и устанавливает дельты (разница) нейронам этого слоя по дельтам следующего - обратное распростронение ошибки (дельты)
      * @param ideal массив дельт следующего слоя
      * @param last флаг о том, что это выходной слой
      */
@@ -66,7 +60,7 @@ final class TrainLayer extends Layer {
     }
 
     /**
-     * setDeltaWeight - метод для установки новых весов по дельтам следующего слоя
+     * Метод для установки новых весов по дельтам следующего слоя
      * @param delta массив дельт следующего слоя
      * @param speed скорость обучения
      * @param alpha момент градиентного спуска
@@ -84,7 +78,7 @@ final class TrainLayer extends Layer {
     }
 
     /**
-     * getDelta - метод для получения дельт нейронов
+     * Метод для получения дельт нейронов
      * @return массив дельт у нейронов в этом слое
      */
     public double[] getDeltas(){
@@ -96,7 +90,7 @@ final class TrainLayer extends Layer {
     }
 
     /**
-     * divWeight - метод для ропорциональной деления весов нейронов, если вес какой-либо связи превысил максимальный
+     * Метод для ропорциональной деления весов нейронов, если вес какой-либо связи превысил максимальный
      */
     public void divWeight(double div){
         for(TrainNeuron neuronTrain : trainNeurons){

@@ -5,17 +5,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 
+/**
+ * Класс Matrix хранит матрицу (изображения) - дверный массив {@code double}.
+ * @author Никифоров Дмитрий
+ * @since 1.1
+ */
 public class Matrix {
+
     protected double[][] matrix;
-
-
 
     public static final byte RED_MASK = (byte) 0xFF0000;
     public static final byte GREEN_MASK = (byte) 0xFF00;
     public static final byte BLUE_MASK = (byte) 0xFF;
 
     public static final byte[] RGB_CHANNEL = {RED_MASK, GREEN_MASK, BLUE_MASK};
-    public static final byte[] WB_CHANNEL = {RED_MASK | GREEN_MASK | BLUE_MASK};
+    public static final byte[] ALL_CHANNEL = {RED_MASK | GREEN_MASK | BLUE_MASK};
 
 
     public Matrix(){}
@@ -24,6 +28,11 @@ public class Matrix {
         matrix = new double[height][width];
     }
 
+    /**
+     * Метод загрузки матрицы определенного канала изображения из файла.
+     * @param fileImage путь до файла.
+     * @param mask канал(RGB) изобржения.
+     */
     public void loadFromFile(String fileImage, byte mask){
         try{
             BufferedImage image = ImageIO.read(new File(fileImage));
@@ -41,6 +50,12 @@ public class Matrix {
         }
     }
 
+    /**
+     * Метод для получения массива матриц (каналов) из изображения
+     * @param fileImage путь до файла.
+     * @param channels массив массок.
+     * @return массив матриц.
+     */
     public static Matrix[] getFromImage(String fileImage, byte[] channels){
         Matrix[] res = new Matrix[channels.length];
         for (int i = 0; i < res.length; i++){
@@ -50,6 +65,10 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Метод для копирования значений матрицы. Данный метод именно копирует, а не сохраняет ссылку.
+     * @param matrix копируемый двумерный массив {@code double}.
+     */
     public void copyMatrix(double[][] matrix){
         if(this.matrix == null){
             this.matrix = new double[matrix.length][matrix[0].length];
@@ -63,7 +82,7 @@ public class Matrix {
     }
 
     /**
-     * sigmoid - метод активации нейрона, представленный в виде функции сигмоиды
+     * Метод активации нейрона, представленный в виде функции сигмоиды
      * @param x значения для активации
      * @return нормализованное значение
      */
@@ -71,6 +90,11 @@ public class Matrix {
         return 1 / (1 + Math.exp(-x));
     }
 
+    /**
+     * pulling(субдискретизация) - метод для уменьшения матрицы в 2 раза.
+     * Из 4 соседних берется максимальное.
+     * @param result ссылка на матрицу куда сохранится результат.
+     */
     public void pulling(Matrix result){
         double[] values = new double[4];
         for(int i = 0; i < this.getH(); i += 2){
@@ -105,6 +129,9 @@ public class Matrix {
         return matrix[i][j];
     }
 
+    /**
+     * Метод для активации всех элементов матрицы
+     */
     public void normalize(){
         Arrays.stream(Arrays.stream(matrix).toArray()).forEach(e -> e = sigmoid((Double) e));
     }

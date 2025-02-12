@@ -9,9 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-// TODO ...                                        v
 /**
- * Класс Convolution представляет собой сущность ..., в которой реализована свертка и пуллинг.
+ * Класс Convolution извлекает признаки из (изображения), в котором реализованы свертка и субдискретизация(пуллинг).
  * Обрабатывает данные типа {@code Matrix} и выдает результат типа {@code Matrix}.
  * Используется сигмоида как функция активации.
  * <p>
@@ -21,10 +20,6 @@ import java.io.IOException;
  * @since 1.1
  */
 public class Convolution implements Network<Matrix, Matrix> {
-    /**
-     * MODEL - модель используемой нейронной сети.
-     * Инициализируется при создании нового экземпляра
-     */
     protected final NetworkModels MODEL;
 
     {

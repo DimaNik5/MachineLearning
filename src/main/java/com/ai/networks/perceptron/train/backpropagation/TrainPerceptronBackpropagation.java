@@ -55,70 +55,28 @@ import java.util.Objects;
  * @since 1.0
  */
 public class TrainPerceptronBackpropagation extends Perceptron implements Training<Double, Double> {
-    /**
-     * trainLayers - массив {@code TrainLayer} для обучения
-     */
     private TrainLayer[] trainLayers;
-    /**
-     * speed - коэффициент скорости обучения.
-     * Чем меньше величина, тем дольше обучение, но меньше шансов пропустить локальный минимум.
-     */
     private double speed;
     /**
      * alpha - момент градиентного спуска.
      * Он позволяет выбираться из локальных минимумов.
      */
     private double alpha;
-    /**
-     * maxWeight - допустимое максимальное значение веса
-     */
     private double maxWeight;
-    /**
-     * fileName - путь до файла, если он есть, где сохранен перцептрон
-     */
     private String fileName;
 
-    /**
-     * middleError - текущая средняя ошибка перцептрона
-     */
     private double middleError = 0;
-    /**
-     * maxError - текущая максимальная ошибка перцептрона
-     */
     private double maxError = 0;
 
-    /**
-     * isTraining - флаг, означающий процесс обучения
-     */
     private boolean isTraining = false;
-    /**
-     * isPrinting - флаг, означающий процесс вывода состояния
-     */
     private boolean isPrinting = false;
-    /**
-     * countDone - количество пройденных эпох
-     */
     private int countDone;
-    /**
-     * epochs - количество эпох, в течение которых происходит обучение
-     */
     private int epochs = 1;
-    /**
-     * in - выборка входных значений
-     */
+
     private List<Double[]> in;
-    /**
-     * out - выборка ожидаемых значений
-     */
     private List<Double[]> out;
 
-    /**
-     * training - отдельный поток для обучения
-     */
     private final Thread training;
-    /**
-     * printing - отдельный поток для вывода состояния
-     */
     private final Thread printing;
 
     /**
@@ -235,7 +193,7 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     }
 
     /**
-     * correction - метод для корректировки всех весовобратным распространением ошибки
+     * Метод для корректировки всех весовобратным распространением ошибки
      * @param ideal массив ожидаемых значений
      */
     private void correction(Double[] ideal){

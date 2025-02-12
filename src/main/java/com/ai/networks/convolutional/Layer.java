@@ -22,7 +22,7 @@ public class Layer {
     protected Filter[] filters;
 
     /**
-     * loadFirstFromString - метод для загрузки первого слоя из строки.
+     * Метод для загрузки первого слоя из строки.
      * @param content {@code String}, содержащая информацию о слое.
      * @throws NumberFormatException если информация не является числом
      * @see #loadFromString(String, Matrix[])
@@ -48,7 +48,7 @@ public class Layer {
     }
 
     /**
-     * loadFromString - метод для загрузки слоя из строки.
+     * Метод для загрузки слоя из строки.
      * @param content {@code String}, содержащая информацию о слое.
      * @param input массив выходных {@code Matrix} предыдущего слоя
      * @throws NumberFormatException если информация не является числом
