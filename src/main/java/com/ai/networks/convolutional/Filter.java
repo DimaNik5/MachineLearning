@@ -5,7 +5,13 @@ import com.ai.networks.Tokens;
 import java.util.Arrays;
 import java.util.stream.DoubleStream;
 
+/**
+ * Класс Filter хранит матрицы фильтра, а также значение смещения.
+ * @author Никифоров Дмитрий
+ * @since 1.1
+ */
 public class Filter {
+
     protected Matrix[] matrices;
     protected double biasValue;
 
@@ -28,6 +34,12 @@ public class Filter {
         }
     }
 
+    /**
+     * convolution - свертка через конктретный фильтр.
+     * <br>Примечание: количесво входных матриц должно совпадать с количеством матриц в фильтре.
+     * @param input массив входных матриц.
+     * @param output выходная матрица.
+     */
     public void convolution(Matrix[] input, Matrix output){
         if(input.length != matrices.length) throw new RuntimeException("The number of input channels does not match the number of filter channels");
         output.setZero();

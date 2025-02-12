@@ -7,7 +7,7 @@ package com.ai;
  * Примечание: данная библиотека разработана на 11 версией языка Java.
  * </p>
  * @author Никифоров Дмитрий
- * @version 1.0
+ * @version 1.1
  */
 public class MachineLearning {
 

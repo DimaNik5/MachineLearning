@@ -8,9 +8,15 @@ import java.util.Arrays;
 public class Matrix {
     protected double[][] matrix;
 
+
+
     public static final byte RED_MASK = (byte) 0xFF0000;
     public static final byte GREEN_MASK = (byte) 0xFF00;
     public static final byte BLUE_MASK = (byte) 0xFF;
+
+    public static final byte[] RGB_CHANNEL = {RED_MASK, GREEN_MASK, BLUE_MASK};
+    public static final byte[] WB_CHANNEL = {RED_MASK | GREEN_MASK | BLUE_MASK};
+
 
     public Matrix(){}
 
@@ -33,6 +39,15 @@ public class Matrix {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Matrix[] getFromImage(String fileImage, byte[] channels){
+        Matrix[] res = new Matrix[channels.length];
+        for (int i = 0; i < res.length; i++){
+            res[i] = new Matrix();
+            res[i].loadFromFile(fileImage, channels[i]);
+        }
+        return res;
     }
 
     public void copyMatrix(double[][] matrix){
