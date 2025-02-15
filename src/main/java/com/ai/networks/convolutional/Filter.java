@@ -17,22 +17,19 @@ public class Filter {
     /**
      * Метод загрузки фильтра из строки
      * @param content {@code String}, содержащая информацию про фильтр.
+     * @throws NumberFormatException если информация не является числом
      */
-    public void loadFromString(String content){
-        try{
-            double[] cont = Arrays.stream(content.split(Tokens.SEP_OF_ELEMENTS)).mapToDouble(Double::parseDouble).toArray();
-            matrices = new Matrix[(int)cont[0]];
-            int count = (int)cont[1] * (int)cont[2];
-            for(int i = 0; i < (int)cont[0]; i++){
-                matrices[i] = new Matrix((int)cont[1], (int)cont[2]);
-                for(int j = 0; j < count; j++){
-                    matrices[i].addTo((int) (j / cont[2]), j % (int)cont[2], (int)cont[3 + count * i + j]);
-                }
+    public void loadFromString(String content) throws NumberFormatException{
+        double[] cont = Arrays.stream(content.split(Tokens.SEP_OF_ELEMENTS)).mapToDouble(Double::parseDouble).toArray();
+        matrices = new Matrix[(int)cont[0]];
+        int count = (int)cont[1] * (int)cont[2];
+        for(int i = 0; i < (int)cont[0]; i++){
+            matrices[i] = new Matrix((int)cont[1], (int)cont[2]);
+            for(int j = 0; j < count; j++){
+                matrices[i].addTo((int) (j / cont[2]), j % (int)cont[2], (int)cont[3 + count * i + j]);
             }
-            biasValue = cont[cont.length - 1];
-        }catch (NumberFormatException e){
-            throw new RuntimeException(e);
         }
+        biasValue = cont[cont.length - 1];
     }
 
     /**
@@ -62,7 +59,7 @@ public class Filter {
      * @param filter матрица фильтра
      * @return {@code double} - сумма произведений соответсвующих значений у входной матрицы и фильтра.
      */
-    private double overlay(int i, int j, Matrix in, Matrix filter){
+    protected double overlay(int i, int j, Matrix in, Matrix filter){
         double res = 0;
         for (int y = 0; y < filter.getH(); y++){
             for(int x = 0; x < filter.getW(); x++){
@@ -70,5 +67,13 @@ public class Filter {
             }
         }
         return res;
+    }
+
+    public Matrix[] getMatrices() {
+        return matrices;
+    }
+
+    public double getBiasValue() {
+        return biasValue;
     }
 }

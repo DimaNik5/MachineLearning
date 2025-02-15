@@ -28,6 +28,21 @@ public class Matrix {
         matrix = new double[height][width];
     }
 
+    public Matrix(double[] mat, int j, int height, int width){
+        matrix = new double[height][width];
+        for (int i = j; i < height * width; i++) {
+            matrix[i / height][i % height] = mat[i];
+        }
+    }
+
+    public static Matrix[] getMatricesFromArray(double[] mat, int count, int height, int width){
+        Matrix[] res = new Matrix[count];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = new Matrix(mat, i * height * width, height, width);
+        }
+        return res;
+    }
+
     /**
      * Метод загрузки матрицы определенного канала изображения из файла.
      * @param fileImage путь до файла.
@@ -91,11 +106,11 @@ public class Matrix {
     }
 
     /**
-     * pulling(субдискретизация) - метод для уменьшения матрицы в 2 раза.
+     * pooling(субдискретизация) - метод для уменьшения матрицы в 2 раза.
      * Из 4 соседних берется максимальное.
      * @param result ссылка на матрицу куда сохранится результат.
      */
-    public void pulling(Matrix result){
+    public void pooling(Matrix result){
         double[] values = new double[4];
         for(int i = 0; i < this.getH(); i += 2){
             for(int j = 0; j < this.getW(); j += 2){
@@ -134,5 +149,9 @@ public class Matrix {
      */
     public void normalize(){
         Arrays.stream(Arrays.stream(matrix).toArray()).forEach(e -> e = sigmoid((Double) e));
+    }
+
+    public double[][] getMatrix() {
+        return matrix;
     }
 }

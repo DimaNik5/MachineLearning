@@ -14,7 +14,7 @@ final class TrainNeuron extends Neuron {
     private double delta;
 
     /**
-     * Метод получения значения производной функции активации (сигмоиды) в конкретно точке
+     * Метод получения значения производной функции активации (сигмоиды) в конкретной точке
      * @param res - нормализованое значение
      * @return значение производной
      */
@@ -31,7 +31,7 @@ final class TrainNeuron extends Neuron {
         weight = new double[countWeight];
         lastModWeight = new double[countWeight];
         for(int i = 0; i < countWeight; i++){
-            Random random = new Random();
+            Random random = new Random(System.currentTimeMillis());
             weight[i] = random.nextDouble() * 2 - 1;
         }
     }

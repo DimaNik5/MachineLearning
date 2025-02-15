@@ -66,6 +66,13 @@ public interface Training<IN, OUT> extends Network<IN, OUT>{
     double[] getDeltaOfInputLayer();
 
     /**
+     * Метод, использующийся для обучения сложных нейронных сетей
+     * @param deltas массив {@code double} - дельты входного слоя
+     * @since 1.1
+     */
+     void setDeltaOfOutputLayer(double[] deltas);
+
+    /**
      * Метод для получения ошибок(отклонений от ожидаемого значения) нейронной сети
      * @return массив {@code double}: [средняя ошибка, максимальная ошибка]
      */

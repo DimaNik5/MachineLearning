@@ -8,6 +8,7 @@ import com.ai.networks.perceptron.Perceptron;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -380,5 +381,28 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     @Override
     public double[] getDeltaOfInputLayer() {
         return trainLayers[0].getDeltas();
+    }
+
+    @Override
+    public void setDeltaOfOutputLayer(double[] deltas) {
+        Double[] curIdeal = new Double[trainLayers[0].getDeltas().length];
+        for(int i = 0; i < trainLayers[0].getDeltas().length; i++){
+            curIdeal[i] = trainLayers[0].getDeltas()[i];
+        }
+        // Получение дельт(разницы от идеала) для каждого слоя с передачей результатов к предыдущему
+        for(int i = trainLayers.length - 2; i >= 0; i--){
+            curIdeal = trainLayers[i].setDelta(curIdeal, false);
+        }
+        boolean f = false; // Превышение максимального веса
+        // Установка новых весов
+        for(int i = 0; i < trainLayers.length - 1; i++){
+            f = f || (Math.abs(trainLayers[i].setDeltaWeight(i == trainLayers.length - 2 ? deltas : trainLayers[i + 1].getDeltas(), speed, alpha)) > maxWeight);
+        }
+        if(f){
+            // Пропорциональное деление весов
+            for(int i = 0; i < trainLayers.length - 1; i++){
+                trainLayers[i].divWeight(maxWeight / 2);
+            }
+        }
     }
 }

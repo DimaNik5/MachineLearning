@@ -35,14 +35,14 @@ public class Layer {
             inputs[i] = new Matrix((int)cont[1], (int)cont[2]);
         }
         int count = layer.length - 1;
-        int h = (int)(cont[1] - cont[3]) + 2;
-        int w = (int)(cont[2] - cont[4]) + 2;
+        int h = (int)(cont[1] - cont[3]) + 1;
+        int w = (int)(cont[2] - cont[4]) + 1;
         filters = new Filter[count];
         temp = new Matrix[count];
         outputs = new Matrix[count];
         for (int i = 0; i < count; i++){
             temp[i] = new Matrix(h, w);
-            outputs[i] = new Matrix(h / 2 + h & 2, w / 2 + w & 2);
+            outputs[i] = new Matrix(h / 2 + h & 1, w / 2 + w & 1);
             filters[i].loadFromString(layer[i + 1]);
         }
     }
@@ -59,14 +59,14 @@ public class Layer {
         double[] cont = Arrays.stream(layer[0].split(Tokens.SEP_OF_ELEMENTS)).mapToDouble(Double::parseDouble).toArray();
         inputs = input;
         int count = layer.length - 1;
-        int h = (int)(inputs[0].getH() - cont[0]) + 2;
-        int w = (int)(inputs[0].getW() - cont[1]) + 2;
+        int h = (int)(inputs[0].getH() - cont[0]) + 1;
+        int w = (int)(inputs[0].getW() - cont[1]) + 1;
         filters = new Filter[count];
         temp = new Matrix[count];
         outputs = new Matrix[count];
         for (int i = 0; i < count; i++){
             temp[i] = new Matrix(h, w);
-            outputs[i] = new Matrix(h / 2 + h & 2, w / 2 + w & 2);
+            outputs[i] = new Matrix(h / 2 + h & 1, w / 2 + w & 1);
             filters[i].loadFromString(layer[i + 1]);
         }
     }
@@ -75,7 +75,7 @@ public class Layer {
         for(int i = 0; i < filters.length; i++){
             filters[i].convolution(inputs, temp[i]);
             temp[i].normalize();
-            temp[i].pulling(outputs[i]);
+            temp[i].pooling(outputs[i]);
         }
     }
 
