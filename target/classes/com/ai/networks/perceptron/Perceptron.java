@@ -19,20 +19,11 @@ import java.io.IOException;
  * @since 1.0
  */
 public class Perceptron implements Network<Double, Double> {
-    /**
-     * MODEL - модель используемой нейронной сети.
-     * Инициализируется при создании нового экземпляра
-     */
     protected final NetworkModels MODEL;
-
     {
-        // Инициализация модели
         MODEL = NetworkModels.PERCEPTRON;
     }
 
-    /**
-     * layers - массив {@code Layer}, содержащий входной, скрытые (при наличии) и выходной слои
-     */
     protected Layer[] layers;
 
     @Override
@@ -101,7 +92,6 @@ public class Perceptron implements Network<Double, Double> {
 
     @Override
     public void setInput(Double[] input) {
-        // Установка входных значений
         layers[0].setInput(input);
     }
 

@@ -8,7 +8,6 @@ import com.ai.networks.perceptron.Perceptron;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -263,36 +262,41 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     }
 
     @Override
-    public void save(String file) {
+    public String getContent() {
+        StringBuilder cont = new StringBuilder();
+        cont.append(trainLayers.length).append(Tokens.SEP_OF_ELEMENTS);
+        // Запись количества нейронов в каждом слое
+        for(TrainLayer layerTrain : trainLayers){
+            cont.append(layerTrain.getLength()).append(Tokens.SEP_OF_ELEMENTS);
+        }
+        cont.append(Tokens.SEP_OF_LAYERS);
 
+        // Проход по всем слоям, кроме выходного(нет весов)
+        for(int k = 0; k < trainLayers.length - 1; k++) {
+            // Проход повсем нейронам слоя
+            for (int i = 0; i < trainLayers[k].getLength(); i++) {
+                // Проход повсем нейронам следующего слоя
+                for (int j = 0; j < trainLayers[k + 1].getLength(); j++) {
+                    // Запись весов от i к j нейрону
+                    cont.append(trainLayers[k].getWeight(i, j)).append(Tokens.SEP_OF_ELEMENTS);
+                }
+                // Знак препинания
+                cont.append(Tokens.SEP_OF_OBJECTS);
+            }
+            // Запись весов нейрона смещения
+            for (int j = 0; j < trainLayers[k + 1].getLength(); j++) {
+                cont.append(trainLayers[k].getWeightB(j)).append(Tokens.SEP_OF_ELEMENTS);
+            }
+            cont.append(Tokens.SEP_OF_LAYERS);
+        }
+        return cont.toString();
+    }
+
+    @Override
+    public void save(String file) {
         if(fileName == null || !fileName.equals(file)) fileName = file;
         try(FileWriter fw = new FileWriter(fileName)) {
-            // Запись количества слоев
-            fw.write(trainLayers.length + Tokens.SEP_OF_ELEMENTS);
-            // Запись количества нейронов в каждом слое
-            for(TrainLayer layerTrain : trainLayers){
-                fw.write(layerTrain.getLength() + Tokens.SEP_OF_ELEMENTS);
-            }
-            fw.write(Tokens.SEP_OF_LAYERS);
-
-            // Проход по всем слоям, кроме выходного(нет весов)
-            for(int k = 0; k < trainLayers.length - 1; k++){
-                // Проход повсем нейронам слоя
-                for(int i = 0; i < trainLayers[k].getLength(); i++){
-                    // Проход повсем нейронам следующего слоя
-                    for(int j = 0; j < trainLayers[k + 1].getLength(); j++){
-                        // Запись весов от i к j нейрону
-                        fw.write(trainLayers[k].getWeight(i, j) + Tokens.SEP_OF_ELEMENTS);
-                    }
-                    // Знак препинания
-                    fw.write(Tokens.SEP_OF_OBJECTS);
-                }
-                // Запись весов нейрона смещения
-                for(int j = 0; j < trainLayers[k + 1].getLength(); j++){
-                    fw.write(trainLayers[k].getWeightB(j) + Tokens.SEP_OF_ELEMENTS);
-                }
-                fw.write(Tokens.SEP_OF_LAYERS);
-            }
+            fw.write(getContent());
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -349,7 +353,6 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     @Override
     public int loadFromString(String content) {
         String[] lines = content.split(Tokens.SEP_OF_LAYERS);
-        System.out.println(lines[0]);
         int l = -1;
         for(String line : lines){
             if(l < 0) {
@@ -385,13 +388,13 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
 
     @Override
     public void setDeltaOfOutputLayer(double[] deltas) {
-        Double[] curIdeal = new Double[trainLayers[0].getDeltas().length];
-        for(int i = 0; i < trainLayers[0].getDeltas().length; i++){
-            curIdeal[i] = trainLayers[0].getDeltas()[i];
+        Double[] curIdeal = new Double[deltas.length];
+        for(int i = 0; i < curIdeal.length; i++){
+            curIdeal[i] = deltas[i];
         }
         // Получение дельт(разницы от идеала) для каждого слоя с передачей результатов к предыдущему
-        for(int i = trainLayers.length - 2; i >= 0; i--){
-            curIdeal = trainLayers[i].setDelta(curIdeal, false);
+        for(int i = trainLayers.length - 1; i >= 0; i--){
+            curIdeal = trainLayers[i].setDelta(curIdeal, i == trainLayers.length - 1);
         }
         boolean f = false; // Превышение максимального веса
         // Установка новых весов

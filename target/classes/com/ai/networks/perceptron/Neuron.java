@@ -6,23 +6,12 @@ package com.ai.networks.perceptron;
  * @since 1.0
  */
 public class Neuron {
-    /**
-     * result - подсчитанное значение
-     */
     protected double result;
-
-    /**
-     * normResult - нормализованное значение, в диапозоне от 0 до 1
-     */
     protected double normResult;
-
-    /**
-     * weight массив {@code double}, хранящий значения весов
-     */
     protected double[] weight;
 
     /**
-     * sigmoid - метод активации нейрона, представленный в виде функции сигмоиды
+     * Метод активации нейрона, представленный в виде функции сигмоиды
      * @param x значения для активации
      * @return нормализованное значение
      */
@@ -46,22 +35,18 @@ public class Neuron {
     public Neuron(){}
 
     /**
-     * normalizeRes - метод для активации нейрона
+     * Метод для активации нейрона
      */
     public void normalizeRes(){
         normResult = sigmoid(result);
     }
 
-    /**
-     * addRes - метод для увеличения значения
-     * @param add добавляемая часть
-     */
     public void addRes(double add){
         result += add;
     }
 
     /**
-     * setNormResult - метод, использующийся для установки нормального значения
+     * Метод, использующийся для установки нормального значения
      * @param result новое нормаьное значение
      * @see #setResult(double)
      */
@@ -70,7 +55,7 @@ public class Neuron {
     }
 
     /**
-     * setResult - метод, использующийся для установки значения
+     * Метод, использующийся для установки значения
      * @param result новое нормаьное значение
      * @see #setNormResult(double)
      */
@@ -79,7 +64,7 @@ public class Neuron {
     }
 
     /**
-     * getNormResult - метод для получения нормального значения
+     * Метод для получения нормального значения
      * @return нормальное значение нейрона
      */
     public double getNormResult() {
@@ -87,18 +72,16 @@ public class Neuron {
     }
 
     /**
-     * getWeight - метод для получения веса к i-ому нейрону следующего слоя
+     * Метод для получения веса к i-ому нейрону следующего слоя
      * @param i индекс нейрона следующего слоя
      * @return значение веса
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы
      */
     public double getWeight(int i){
-        if(i < 0 || i >= weight.length) throw new IndexOutOfBoundsException(i);
         return weight[i];
     }
 
     /**
-     * getLenWeight - метод для получения количества нейронов в следующем слое
+     * Метод для получения количества нейронов в следующем слое
      * @return количество весов
      */
     public double getLenWeight(){
@@ -106,7 +89,7 @@ public class Neuron {
     }
 
     /**
-     * setWeight - метод для установки значения конкретного веса
+     * Метод для установки значения конкретного веса
      * @param w значение веса
      * @param i индекс веса
      * @throws IndexOutOfBoundsException если индекс выходит за пределы

@@ -6,15 +6,8 @@ package com.ai.networks.perceptron;
  * @since 1.0
  */
 public class Layer {
-    /**
-     * neurons - массив {@code Neuron}, хранящий основные нейроны
-     */
     protected Neuron[] neurons;
-
-    /**
-     * b - {@code Neuron} смещения
-     */
-    protected Neuron b;
+    protected Neuron biasNeuron;
 
     /**
      * Пустой конструктор, использующийся в наследнике для предотвращения повторного создания
@@ -33,11 +26,11 @@ public class Layer {
         for(int i = 0; i < length; i++){
             neurons[i] = new Neuron(nexLen);
         }
-        b = new Neuron(nexLen);
+        biasNeuron = new Neuron(nexLen);
     }
 
     /**
-     * normalize - метод для активации значений в нейронах слоя.
+     * Метод для активации значений в нейронах слоя.
      * Используется после подсчета значений у слоя.
      */
     public void normalize(){
@@ -47,7 +40,7 @@ public class Layer {
     }
 
     /**
-     * setInput - метод для установки значений у входного слоя
+     * Метод для установки значений у входного слоя
      * <p>
      * Примечание: ожидается, что значния нормализованы
      * </p>
@@ -62,19 +55,17 @@ public class Layer {
     }
 
     /**
-     * getNormResult - метод для получения нормального значения у нейрона
+     * Метод для получения нормального значения у нейрона
      * @param i индекс нейрона
      * @return {@code double} - нормальное значение
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы {@code neurons}
      * @see #getNormResult()
      */
     public double getNormResult(int i){
-        if(i < 0 || i >= neurons.length) throw new IndexOutOfBoundsException(i);
         return neurons[i].getNormResult();
     }
 
     /**
-     * getNormResult - метод для получения нормального значения у нейронов слоя
+     * Метод для получения нормального значения у нейронов слоя
      * @return массив {@code Double} нормальных значений нейронов
      * @see #getNormResult(int)
      */
@@ -87,44 +78,37 @@ public class Layer {
     }
 
     /**
-     * getWeight - метод для получения веса между нейронами i-ым этого и j-ым следующего слоя
+     * Метод для получения веса между нейронами i-ым этого и j-ым следующего слоя
      * @param i индекс нейрона текущего слоя
      * @param j индекс нейрона следующего слоя
      * @return {@code double} - вес
-     * @throws IndexOutOfBoundsException если хотябы один индекс выходит за пределы
      * @see #getWeightB(int)
      */
     public double getWeight(int i, int j){
-        if(i < 0 || i >= neurons.length) throw new IndexOutOfBoundsException(i);
-        if(j < 0 || j >= neurons[i].getLenWeight()) throw new IndexOutOfBoundsException(j);
         return neurons[i].getWeight(j);
     }
 
     /**
-     * getWeightB - метод для получения веса между нейроном смщения i-ым нейроном следующего слоя
+     * Метод для получения веса между нейроном смщения i-ым нейроном следующего слоя
      * @param i индекс нейрона следующего слоя
      * @return {@code double} - вес
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы следующего слоя
      * @see #getWeight(int, int)
      */
     public double getWeightB(int i){
-        if(i < 0 || i >= b.getLenWeight()) throw new IndexOutOfBoundsException(i);
-        return b.getWeight(i);
+        return biasNeuron.getWeight(i);
     }
 
     /**
-     * addResult - метод для добавления значения к результату у нейрона
+     * Метод для добавления значения к результату у нейрона
      * @param i индекс нейрона
      * @param add добавляемое значение
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы {@code neurons}
      */
     public void addResult(int i, double add){
-        if(i < 0 || i >= neurons.length) throw new IndexOutOfBoundsException(i);
         neurons[i].addRes(add);
     }
 
     /**
-     * getLength - метод, использующийся для получения количества основных нейронов
+     * Метод, использующийся для получения количества основных нейронов
      * @return количество нейронов слоя
      */
     public int getLength(){
@@ -132,7 +116,7 @@ public class Layer {
     }
 
     /**
-     * setZero - метод для установки значений всех нейронов в 0.
+     * Метод для установки значений всех нейронов в 0.
      * Используется как очистка значений от прошлых подсчетов.
      */
     public void setZero(){
@@ -142,7 +126,7 @@ public class Layer {
     }
 
     /**
-     * setWeight - метод для установки весов для заданного нейрона
+     * Метод для установки весов для заданного нейрона
      * @param weights массив {@code String}, содержащий значения весов
      * @param i индекс нейрона
      * @return {@code true} при успешной установке значений
@@ -161,7 +145,7 @@ public class Layer {
     }
 
     /**
-     * setWeight - метод для установки весов для нейрона смещения
+     * Метод для установки весов для нейрона смещения
      * @param weights массив {@code String}, содержащий значения весов
      * @return {@code true} при успешной установке значений
      * @see #setWeight(String[], int)
@@ -169,7 +153,7 @@ public class Layer {
     public boolean setWeightB(String[] weights){
         try{
             for(int j = 0; j < weights.length; j++){
-                b.setWeight(Double.parseDouble(weights[j]), j);
+                biasNeuron.setWeight(Double.parseDouble(weights[j]), j);
             }
         } catch (NumberFormatException e) {
             return false;

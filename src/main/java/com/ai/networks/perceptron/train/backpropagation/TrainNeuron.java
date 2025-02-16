@@ -5,7 +5,7 @@ import com.ai.networks.perceptron.Neuron;
 import java.util.Random;
 
 /**
- * Класс TrainLayer дополняет сущность {@code Neuron} возможностью обучения.
+ * Класс TrainNeuron дополняет сущность {@code Neuron} возможностью обучения.
  * @author Никифоров Дмитрий
  * @since 1.0
  */

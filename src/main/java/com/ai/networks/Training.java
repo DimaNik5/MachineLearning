@@ -60,7 +60,7 @@ public interface Training<IN, OUT> extends Network<IN, OUT>{
     void save();
 
     /**
-     * Метод, использующийся для обучения последовательных нейронных сетей
+     * Метод, использующийся для обучения сложных нейронных сетей
      * @return массив {@code double} - дельты входного слоя
      */
     double[] getDeltaOfInputLayer();
@@ -71,6 +71,13 @@ public interface Training<IN, OUT> extends Network<IN, OUT>{
      * @since 1.1
      */
      void setDeltaOfOutputLayer(double[] deltas);
+
+    /**
+     * Метод, использующийся для сохранения сложных нейронных сетей
+     * @return строка, содержащая информацию про сеть
+     * @since 1.1
+     */
+     String getContent();
 
     /**
      * Метод для получения ошибок(отклонений от ожидаемого значения) нейронной сети

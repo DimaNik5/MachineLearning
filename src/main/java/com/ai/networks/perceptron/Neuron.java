@@ -75,10 +75,8 @@ public class Neuron {
      * Метод для получения веса к i-ому нейрону следующего слоя
      * @param i индекс нейрона следующего слоя
      * @return значение веса
-     * @throws IndexOutOfBoundsException если индекс выходит за пределы
      */
     public double getWeight(int i){
-        if(i < 0 || i >= weight.length) throw new IndexOutOfBoundsException(i);
         return weight[i];
     }
 

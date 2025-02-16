@@ -10,7 +10,7 @@ package com.ai.networks;
 public interface Network<IN, OUT> {
 
     /**
-     * loadFromFile - метод, позволяющий загружать данные о неронной сети из файла.
+     * Метод, позволяющий загружать данные о неронной сети из файла.
      * @param fileName {@code String}, путь до файла.
      * @return {@code int} - результат загрузки. При успешной загрузке - 0. При неудаче - 1.
      * @throws NumberFormatException если в файле нечисловой формат данных
@@ -19,7 +19,7 @@ public interface Network<IN, OUT> {
     int loadFromFile(String fileName);
 
     /**
-     * loadFromString - метод, позволяющий загружать данные о неронной сети из строки.
+     * Метод, позволяющий загружать данные о неронной сети из строки.
      * @param content {@code String}, данные о неронной сети.
      * @return {@code int} - результат загрузки. При успешной загрузке - 0. При неудаче - 1.
      * @throws NumberFormatException если в строке нечисловой формат данных
@@ -27,24 +27,24 @@ public interface Network<IN, OUT> {
     int loadFromString(String content);
 
     /**
-     * setInput - метод, загружающий входные данные в нейронную сеть
+     * Метод, загружающий входные данные в нейронную сеть
      * @param input массив {@code IN}, входные данные
      */
     void setInput(IN[] input);
 
     /**
-     * counting - метод считающий результат
+     * Метод считающий результат
      */
     void counting();
 
     /**
-     * getOutput - метод, возвращающий посчитанные данные нейронной сетью
+     * Метод, возвращающий посчитанные данные нейронной сетью
      * @return массив {@code OUT} - выходные данные
      */
     OUT[] getOutput();
 
     /**
-     * getModel - метод, возвращающий тип используемой нейронной сети
+     * Метод, возвращающий тип используемой нейронной сети
      * @return {@code NetworkModels} - тип
      */
     NetworkModels getModel();

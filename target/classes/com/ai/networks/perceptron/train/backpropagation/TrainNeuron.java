@@ -5,23 +5,16 @@ import com.ai.networks.perceptron.Neuron;
 import java.util.Random;
 
 /**
- * Класс TrainLayer дополняет сущность {@code Neuron} возможностью обучения.
+ * Класс TrainNeuron дополняет сущность {@code Neuron} возможностью обучения.
  * @author Никифоров Дмитрий
  * @since 1.0
  */
 final class TrainNeuron extends Neuron {
-    /**
-     * lastModWeight - массив прошлых изменений весов.
-     * Используется в градиентном спуске для преодоления локальных минимумов.
-     */
     private double[] lastModWeight;
-    /**
-     * delta - посчитанное значение дельты нейрона
-     */
     private double delta;
 
     /**
-     * derSigmoid - метод получения значения производной функции активации (сигмоиды) в конкретно точке
+     * Метод получения значения производной функции активации (сигмоиды) в конкретной точке
      * @param res - нормализованое значение
      * @return значение производной
      */
@@ -38,7 +31,7 @@ final class TrainNeuron extends Neuron {
         weight = new double[countWeight];
         lastModWeight = new double[countWeight];
         for(int i = 0; i < countWeight; i++){
-            Random random = new Random();
+            Random random = new Random(System.currentTimeMillis());
             weight[i] = random.nextDouble() * 2 - 1;
         }
     }
@@ -50,7 +43,7 @@ final class TrainNeuron extends Neuron {
     TrainNeuron(){}
 
     /**
-     * setDelta - метод для установки дельты, которая домножатся на производную
+     * Метод для установки дельты, которая домножатся на производную
      * @param delta значение дельты
      */
     public double setDelta(double delta){
@@ -58,7 +51,7 @@ final class TrainNeuron extends Neuron {
     }
 
     /**
-     * divWeight - метод для деления всех весов нейрона
+     * Метод для деления всех весов нейрона
      * @param div знаменатель
      */
     public void divWeight(double div){
@@ -67,7 +60,7 @@ final class TrainNeuron extends Neuron {
     }
 
     /**
-     * getDelta - метод для получения дельты нейрона
+     * Метод для получения дельты нейрона
      * @return дельта нейрона
      */
     public double getDelta(){
@@ -75,7 +68,7 @@ final class TrainNeuron extends Neuron {
     }
 
     /**
-     * setDeltaWeight - метод для подсчета и изменения весов нейрона по дельтам следующего слоя
+     * Метод для подсчета и изменения весов нейрона по дельтам следующего слоя
      * @param delta массив дельт следующего слоя
      * @param speed скорость обучения
      * @param alpha момент градиентного спуска

@@ -7,4 +7,5 @@ package com.ai.networks;
  */
 public enum NetworkModels {
     PERCEPTRON,
+    CONVOLUTION,
 }

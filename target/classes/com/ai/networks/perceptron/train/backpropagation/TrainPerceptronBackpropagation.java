@@ -55,70 +55,28 @@ import java.util.Objects;
  * @since 1.0
  */
 public class TrainPerceptronBackpropagation extends Perceptron implements Training<Double, Double> {
-    /**
-     * trainLayers - массив {@code TrainLayer} для обучения
-     */
     private TrainLayer[] trainLayers;
-    /**
-     * speed - коэффициент скорости обучения.
-     * Чем меньше величина, тем дольше обучение, но меньше шансов пропустить локальный минимум.
-     */
     private double speed;
     /**
      * alpha - момент градиентного спуска.
      * Он позволяет выбираться из локальных минимумов.
      */
     private double alpha;
-    /**
-     * maxWeight - допустимое максимальное значение веса
-     */
     private double maxWeight;
-    /**
-     * fileName - путь до файла, если он есть, где сохранен перцептрон
-     */
     private String fileName;
 
-    /**
-     * middleError - текущая средняя ошибка перцептрона
-     */
     private double middleError = 0;
-    /**
-     * maxError - текущая максимальная ошибка перцептрона
-     */
     private double maxError = 0;
 
-    /**
-     * isTraining - флаг, означающий процесс обучения
-     */
     private boolean isTraining = false;
-    /**
-     * isPrinting - флаг, означающий процесс вывода состояния
-     */
     private boolean isPrinting = false;
-    /**
-     * countDone - количество пройденных эпох
-     */
     private int countDone;
-    /**
-     * epochs - количество эпох, в течение которых происходит обучение
-     */
     private int epochs = 1;
-    /**
-     * in - выборка входных значений
-     */
+
     private List<Double[]> in;
-    /**
-     * out - выборка ожидаемых значений
-     */
     private List<Double[]> out;
 
-    /**
-     * training - отдельный поток для обучения
-     */
     private final Thread training;
-    /**
-     * printing - отдельный поток для вывода состояния
-     */
     private final Thread printing;
 
     /**
@@ -235,7 +193,7 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     }
 
     /**
-     * correction - метод для корректировки всех весовобратным распространением ошибки
+     * Метод для корректировки всех весовобратным распространением ошибки
      * @param ideal массив ожидаемых значений
      */
     private void correction(Double[] ideal){
@@ -304,36 +262,41 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     }
 
     @Override
-    public void save(String file) {
+    public String getContent() {
+        StringBuilder cont = new StringBuilder();
+        cont.append(trainLayers.length).append(Tokens.SEP_OF_ELEMENTS);
+        // Запись количества нейронов в каждом слое
+        for(TrainLayer layerTrain : trainLayers){
+            cont.append(layerTrain.getLength()).append(Tokens.SEP_OF_ELEMENTS);
+        }
+        cont.append(Tokens.SEP_OF_LAYERS);
 
+        // Проход по всем слоям, кроме выходного(нет весов)
+        for(int k = 0; k < trainLayers.length - 1; k++) {
+            // Проход повсем нейронам слоя
+            for (int i = 0; i < trainLayers[k].getLength(); i++) {
+                // Проход повсем нейронам следующего слоя
+                for (int j = 0; j < trainLayers[k + 1].getLength(); j++) {
+                    // Запись весов от i к j нейрону
+                    cont.append(trainLayers[k].getWeight(i, j)).append(Tokens.SEP_OF_ELEMENTS);
+                }
+                // Знак препинания
+                cont.append(Tokens.SEP_OF_OBJECTS);
+            }
+            // Запись весов нейрона смещения
+            for (int j = 0; j < trainLayers[k + 1].getLength(); j++) {
+                cont.append(trainLayers[k].getWeightB(j)).append(Tokens.SEP_OF_ELEMENTS);
+            }
+            cont.append(Tokens.SEP_OF_LAYERS);
+        }
+        return cont.toString();
+    }
+
+    @Override
+    public void save(String file) {
         if(fileName == null || !fileName.equals(file)) fileName = file;
         try(FileWriter fw = new FileWriter(fileName)) {
-            // Запись количества слоев
-            fw.write(trainLayers.length + Tokens.SEP_OF_ELEMENTS);
-            // Запись количества нейронов в каждом слое
-            for(TrainLayer layerTrain : trainLayers){
-                fw.write(layerTrain.getLength() + Tokens.SEP_OF_ELEMENTS);
-            }
-            fw.write(Tokens.SEP_OF_LAYERS);
-
-            // Проход по всем слоям, кроме выходного(нет весов)
-            for(int k = 0; k < trainLayers.length - 1; k++){
-                // Проход повсем нейронам слоя
-                for(int i = 0; i < trainLayers[k].getLength(); i++){
-                    // Проход повсем нейронам следующего слоя
-                    for(int j = 0; j < trainLayers[k + 1].getLength(); j++){
-                        // Запись весов от i к j нейрону
-                        fw.write(trainLayers[k].getWeight(i, j) + Tokens.SEP_OF_ELEMENTS);
-                    }
-                    // Знак препинания
-                    fw.write(Tokens.SEP_OF_OBJECTS);
-                }
-                // Запись весов нейрона смещения
-                for(int j = 0; j < trainLayers[k + 1].getLength(); j++){
-                    fw.write(trainLayers[k].getWeightB(j) + Tokens.SEP_OF_ELEMENTS);
-                }
-                fw.write(Tokens.SEP_OF_LAYERS);
-            }
+            fw.write(getContent());
         }
         catch (IOException e) {
             throw new RuntimeException(e);
@@ -390,7 +353,6 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     @Override
     public int loadFromString(String content) {
         String[] lines = content.split(Tokens.SEP_OF_LAYERS);
-        System.out.println(lines[0]);
         int l = -1;
         for(String line : lines){
             if(l < 0) {
@@ -422,5 +384,28 @@ public class TrainPerceptronBackpropagation extends Perceptron implements Traini
     @Override
     public double[] getDeltaOfInputLayer() {
         return trainLayers[0].getDeltas();
+    }
+
+    @Override
+    public void setDeltaOfOutputLayer(double[] deltas) {
+        Double[] curIdeal = new Double[deltas.length];
+        for(int i = 0; i < curIdeal.length; i++){
+            curIdeal[i] = deltas[i];
+        }
+        // Получение дельт(разницы от идеала) для каждого слоя с передачей результатов к предыдущему
+        for(int i = trainLayers.length - 1; i >= 0; i--){
+            curIdeal = trainLayers[i].setDelta(curIdeal, i == trainLayers.length - 1);
+        }
+        boolean f = false; // Превышение максимального веса
+        // Установка новых весов
+        for(int i = 0; i < trainLayers.length - 1; i++){
+            f = f || (Math.abs(trainLayers[i].setDeltaWeight(i == trainLayers.length - 2 ? deltas : trainLayers[i + 1].getDeltas(), speed, alpha)) > maxWeight);
+        }
+        if(f){
+            // Пропорциональное деление весов
+            for(int i = 0; i < trainLayers.length - 1; i++){
+                trainLayers[i].divWeight(maxWeight / 2);
+            }
+        }
     }
 }
